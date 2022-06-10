@@ -1,4 +1,5 @@
 ﻿using Company_Management.Context;
+using Company_Management.Modules;
 using Company_Management.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,7 @@ namespace Company_Management
 
             //Configure the Services
             services.AddTransient<EmployeeService>();
+            services.AddTransient<ExcelBulkUploadParameter>();
 
             // configure DI for application services
             services.AddScoped<IEmployeeService, EmployeeService>();

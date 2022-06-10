@@ -12,7 +12,7 @@ namespace Company_Management.Modules
         public string Name { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        public long Phone { get; set; }
+        public string Phone { get; set; }
 
         [DataType(DataType.EmailAddress)]
         public string EmailID { get; set; }

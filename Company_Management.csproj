@@ -7,7 +7,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="UploadFieFolder\**" />
+	  <Compile Remove="UploadFileFolder\**" />
+	  <Content Remove="UploadFieFolder\**" />
+	  <Content Remove="UploadFileFolder\**" />
+	  <EmbeddedResource Remove="UploadFieFolder\**" />
+	  <EmbeddedResource Remove="UploadFileFolder\**" />
+	  <None Remove="UploadFieFolder\**" />
+	  <None Remove="UploadFileFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ExcelDataReader" Version="3.6.0" />
+		<PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
 		<PackageReference Include="IdentityModel" Version="6.0.0" />
+		<PackageReference Include="LumenWorksCsvReader" Version="4.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-preview.4.22229.2" />
