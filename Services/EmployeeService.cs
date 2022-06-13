@@ -1,10 +1,10 @@
 ﻿using Company_Management.Context;
+using Company_Management.Exceptions;
 using Company_Management.Modules;
 using ExcelDataReader;
 using LumenWorks.Framework.IO.Csv;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using Microsoft.Extensions.Configuration;
 
 namespace Company_Management.Services
 {
@@ -29,14 +29,14 @@ namespace Company_Management.Services
         public async Task<Employee> GetEmployeeByEmail(string email)
         {
             var response = _context.Employees.FirstOrDefault(e => e.EmailID == email);
-            if (response == null) throw new KeyNotFoundException("Employee not found in this Employee EmailID");
+            if (response == null) throw new KeyNotFoundException("Email '" + email + "' not found");
             return response;
         }
 
         public async Task<Employee> GetEmployeeById(string empId)
         {
             var emp = _context.Employees.FirstOrDefault(e => e.EmployeeID == empId);
-            if (emp == null) throw new KeyNotFoundException("Employee not found Employee ID");
+            if (emp == null) throw new KeyNotFoundException("EmployeeID '" + empId + "' not found");
             return emp;
         }
 
@@ -95,12 +95,8 @@ namespace Company_Management.Services
                 }
                 else
                 {
-                    response.Message = "InValid File";
+                    throw new AppException("Invalid File, Please select proper file format.");
                 }
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
             }
             finally
             {
@@ -138,7 +134,7 @@ namespace Company_Management.Services
                         for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
                         {
                             ExcelBulkUploadParameter rows = new ExcelBulkUploadParameter();
-                            rows.EmployeeID = dataSet.Tables[0].Rows[i].ItemArray[0] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[0]) : "-1";
+                            rows.EmployeeID = dataSet.Tables[0].Rows[i].ItemArray[6] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[0]) : "-1";
                             rows.Name = dataSet.Tables[0].Rows[i].ItemArray[1] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[1]) : "-1";
                             rows.Phone = dataSet.Tables[0].Rows[i].ItemArray[2] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[2]) : "-1";
                             rows.EmailID = dataSet.Tables[0].Rows[i].ItemArray[3] != null ? Convert.ToString(dataSet.Tables[0].Rows[i].ItemArray[3]) : "-1";
@@ -180,12 +176,8 @@ namespace Company_Management.Services
                 }
                 else
                 {
-                    response.Message = "Invalid File, Please select proper file format.";
+                    throw new AppException("Invalid File, Please select proper file format.");
                 }
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
             }
             finally
             {

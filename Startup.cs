@@ -1,4 +1,5 @@
 ﻿using Company_Management.Context;
+using Company_Management.Exceptions;
 using Company_Management.Modules;
 using Company_Management.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -65,6 +66,8 @@ namespace Company_Management
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // global error handler
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

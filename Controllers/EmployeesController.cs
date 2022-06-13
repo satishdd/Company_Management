@@ -11,7 +11,6 @@ namespace Company_Management.Controllers
     public class EmployeesController : ControllerBase
     {
         private IEmployeeService _employeeService;
-        private readonly DataContext _context;
 
         public EmployeesController(IEmployeeService employeeService)
         {
@@ -35,12 +34,6 @@ namespace Company_Management.Controllers
                 }
 
                 response = await _employeeService.UploadXMLFile(request, path);
-
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-
             }
             finally
             {
@@ -48,7 +41,6 @@ namespace Company_Management.Controllers
                 foreach (string file in files)
                 {
                     System.IO.File.Delete(file);
-                    Console.WriteLine($"{file} is deleted.");
                 }
             }
 
@@ -77,14 +69,7 @@ namespace Company_Management.Controllers
                 foreach (string file in files)
                 {
                     System.IO.File.Delete(file);
-                    Console.WriteLine($"{file} is deleted.");
                 }
-
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-
             }
             finally
             {
