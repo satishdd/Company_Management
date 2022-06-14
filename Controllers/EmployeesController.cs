@@ -1,4 +1,4 @@
-﻿using Company_Management.Context;
+﻿using Company_Management.Exceptions;
 using Company_Management.Modules;
 using Company_Management.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +19,11 @@ namespace Company_Management.Controllers
 
         [HttpPost]
         [SwaggerOperation
-        (Summary = "Upload employees data from .xlsx")]
-        [Route("UploadExcelFile")]
-        public async Task<IActionResult> UploadExcelFile([FromForm] UploadXMLFileRequest request)
+        (Summary = "Bulk upload employees data to db. (Supported file formats : .XLSX and .CSV)")]
+        [Route("UploadFile")]
+        public async Task<IActionResult> UploadFileData([FromForm] UploadDataFromFile request)
         {
-            UploadXMLFileResponse response = new UploadXMLFileResponse();
-
+            FileResponse response = new FileResponse();
             string path = "UploadFileFolder/" + request.File.FileName;
             try
             {
@@ -33,7 +32,7 @@ namespace Company_Management.Controllers
                     await request.File.CopyToAsync(stream);
                 }
 
-                response = await _employeeService.UploadXMLFile(request, path);
+                response = await _employeeService.UploadFileData(request, path);
             }
             finally
             {
@@ -46,44 +45,6 @@ namespace Company_Management.Controllers
 
             return Ok(response);
         }
-
-        [HttpPost]
-        [SwaggerOperation
-        (Summary = "Upload employees data .csv file")]
-        [Route("UploadCSVFile")]
-        public async Task<IActionResult> UploadCSVFile([FromForm] UploadCSVFileRequest request)
-        {
-            UploadCSVFileResponse response = new UploadCSVFileResponse();
-
-            string path = "UploadFileFolder/" + request.File.FileName;
-            try
-            {
-                using (FileStream stream = new FileStream(path, FileMode.CreateNew))
-                {
-                    await request.File.CopyToAsync(stream);
-                }
-
-                response = await _employeeService.UploadCSVFile(request, path);
-
-                string[] files = Directory.GetFiles("UploadFileFolder/");
-                foreach (string file in files)
-                {
-                    System.IO.File.Delete(file);
-                }
-            }
-            finally
-            {
-                string[] files = Directory.GetFiles("UploadFileFolder/");
-                foreach (string file in files)
-                {
-                    System.IO.File.Delete(file);
-                    Console.WriteLine($"{file} is deleted.");
-                }
-            }
-
-            return Ok(response);
-        }
-
 
         [SwaggerOperation
         (Summary = "Get all the Employees")]
@@ -99,6 +60,9 @@ namespace Company_Management.Controllers
         [HttpGet("{email}")]
         public async Task<IActionResult> GetEmployeeByEmail(string email)
         {
+            if (Validator.ValidateEmail(email))
+                throw new AppException("The specified string is not in the form required for an e-mail address.");
+
             var employee = await _employeeService.GetEmployeeByEmail(email);
             return Ok(employee);
         }
@@ -108,6 +72,10 @@ namespace Company_Management.Controllers
         [HttpGet("employee/{empId}")]
         public async Task<IActionResult> GetEmployeeById(string empId)
         {
+            if (!empId.StartsWith("VD"))
+            {
+                throw new AppException("Enter valid employee ID : i.e. VD123");
+            }
             var employee = await _employeeService.GetEmployeeById(empId);
             return Ok(employee);
         }

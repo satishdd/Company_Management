@@ -7,14 +7,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="UploadFieFolder\**" />
-	  <Compile Remove="UploadFileFolder\**" />
-	  <Content Remove="UploadFieFolder\**" />
-	  <Content Remove="UploadFileFolder\**" />
-	  <EmbeddedResource Remove="UploadFieFolder\**" />
-	  <EmbeddedResource Remove="UploadFileFolder\**" />
-	  <None Remove="UploadFieFolder\**" />
-	  <None Remove="UploadFileFolder\**" />
+		<Compile Remove="Exceptions\Log\**" />
+		<Compile Remove="UploadFileFolder\**" />
+		<Content Remove="Exceptions\Log\**" />
+		<Content Remove="UploadFileFolder\**" />
+		<EmbeddedResource Remove="Exceptions\Log\**" />
+		<EmbeddedResource Remove="UploadFileFolder\**" />
+		<None Remove="Exceptions\Log\**" />
+		<None Remove="UploadFileFolder\**" />
 	</ItemGroup>
 
 	<ItemGroup>

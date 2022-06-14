@@ -23,7 +23,7 @@ namespace Company_Management.Exceptions
                 var response = context.Response;
                 response.ContentType = "application/json";
 
-                switch(error)
+                switch (error)
                 {
                     case AppException e:
                         // custom application error
@@ -36,12 +36,30 @@ namespace Company_Management.Exceptions
                     default:
                         // unhandled error
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        ErrorLogging(error);
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { message = error?.Message});
+                var result = JsonSerializer.Serialize(new { message = error?.Message });
 
                 await response.WriteAsync(result);
+            }
+        }
+        public static void ErrorLogging(Exception ex)
+        {
+            string strPath = "Exceptions/Log/Log.txt";
+            if (!File.Exists(strPath))
+            {
+                File.Create(strPath).Dispose();
+            }
+            using (StreamWriter sw = File.AppendText(strPath))
+            {
+                sw.WriteLine("=============Error Logging ===========");
+                sw.WriteLine("===========Start============= " + DateTime.Now);
+                sw.WriteLine("Error Message: " + ex.Message);
+                sw.WriteLine("Stack Trace: " + ex.StackTrace);
+                sw.WriteLine("===========End============= " + DateTime.Now);
+                sw.WriteLine(""); sw.WriteLine(""); sw.WriteLine("");
             }
         }
     }

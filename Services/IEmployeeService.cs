@@ -9,8 +9,6 @@ namespace Company_Management.Services
         public Task<Employee> GetEmployeeById(string empID);
 
         // Upload data from Excel/.csv file.
-        public Task<UploadXMLFileResponse> UploadXMLFile(UploadXMLFileRequest request, string Path);
-
-        public Task<UploadCSVFileResponse> UploadCSVFile(UploadCSVFileRequest request, string Path);
+        public Task<FileResponse> UploadFileData(UploadDataFromFile request, string Path);
     }
 }

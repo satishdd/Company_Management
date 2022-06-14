@@ -30,7 +30,7 @@ namespace Company_Management
 
             //Configure the Services
             services.AddTransient<EmployeeService>();
-            services.AddTransient<ExcelBulkUploadParameter>();
+            services.AddTransient<BulkUploadParameter>();
 
             // configure DI for application services
             services.AddScoped<IEmployeeService, EmployeeService>();
