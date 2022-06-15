@@ -60,7 +60,7 @@ namespace Company_Management.Controllers
         [HttpGet("{email}")]
         public async Task<IActionResult> GetEmployeeByEmail(string email)
         {
-            if (Validator.ValidateEmail(email))
+            if (!Validator.ValidateEmail(email))
                 throw new AppException("The specified string is not in the form required for an e-mail address.");
 
             var employee = await _employeeService.GetEmployeeByEmail(email);
