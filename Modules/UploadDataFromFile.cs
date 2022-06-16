@@ -9,10 +9,6 @@ namespace Company_Management.Modules
     {
         public IFormFile File { get; set; }
     }
-    public class FileResponse
-    {
-        public string Message { get; set; }
-    }
 
     public class BulkUploadParameter
     {

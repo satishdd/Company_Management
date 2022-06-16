@@ -17,3 +17,6 @@ dotnet_diagnostic.CS1998.severity = silent
 
 # CS0162: Unreachable code detected
 dotnet_diagnostic.CS0162.severity = silent
+
+# CS8619: Nullability of reference types in value doesn't match target type.
+dotnet_diagnostic.CS8619.severity = silent

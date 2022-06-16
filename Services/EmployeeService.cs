@@ -1,4 +1,5 @@
 ﻿using Company_Management.Context;
+using Company_Management.Controllers.Params;
 using Company_Management.Exceptions;
 using Company_Management.Modules;
 using ExcelDataReader;
@@ -71,9 +72,9 @@ namespace Company_Management.Services
             }
         }
 
-        public async Task<FileResponse> UploadFileData(UploadDataFromFile request, string path)
+        public async Task<Response> UploadFileData(UploadDataFromFile request, string path)
         {
-            FileResponse response = new FileResponse();
+            Response response = new Response();
             List<BulkUploadParameter> Parameters = new List<BulkUploadParameter>();
             DataSet dataSet;
 
@@ -314,6 +315,25 @@ namespace Company_Management.Services
             }
 
             return response;
+        }
+
+        public List<FeedbackDetails> GetEmployeeByMonth(GetMonthwiseEmployees model)
+        {
+            string date = model.Date.ToString("dd/MM/yyyy");
+
+            List<FeedbackDetails> res = new QueryConstraints(_context).PicEmployees(date, model.NumberOfEmployees);
+
+            if (res != null)
+            {
+                _context.AddAsync(res);
+                _context.SaveChangesAsync();
+                //_context.SaveChanges();
+            }
+            else
+            {
+                throw new AppException("No records found");
+            }
+            return res;
         }
     }
 }

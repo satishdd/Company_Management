@@ -19,5 +19,6 @@ namespace Company_Management.Context
         }
 
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<FeedbackDetails> FeedbackDetails { get; set; }
     }
 }

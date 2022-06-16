@@ -1,4 +1,5 @@
-﻿using Company_Management.Exceptions;
+﻿using Company_Management.Controllers.Params;
+using Company_Management.Exceptions;
 using Company_Management.Modules;
 using Company_Management.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace Company_Management.Controllers
         [Route("UploadFile")]
         public async Task<IActionResult> UploadFileData([FromForm] UploadDataFromFile request)
         {
-            FileResponse response = new FileResponse();
+            Response response = new Response();
             string path = "UploadFileFolder/" + request.File.FileName;
             try
             {
@@ -78,6 +79,18 @@ namespace Company_Management.Controllers
             }
             var employee = await _employeeService.GetEmployeeById(empId);
             return Ok(employee);
+        }
+
+        [HttpPost]
+        [SwaggerOperation
+        (Summary = "Fetch random employees for feedback")]
+        [Route("FetchRandomEmployees")]
+        public IActionResult GetEmployeeByMonth([FromForm] GetMonthwiseEmployees model)
+        {
+            if (model == null) { throw new AppException("Please enter the date"); }
+            if (model.NumberOfEmployees == 0) { model.NumberOfEmployees = 5; }
+            var employees = _employeeService.GetEmployeeByMonth(model);
+            return Ok(employees);
         }
     }
 }
