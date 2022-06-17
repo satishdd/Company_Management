@@ -2,7 +2,7 @@
 
 namespace Company_Management.Controllers.Params
 {
-    public class GetMonthwiseEmployees
+    public class PicRandomEmployees
     {
         [Required]
         [DataType(DataType.DateTime)]

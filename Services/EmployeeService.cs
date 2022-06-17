@@ -317,23 +317,45 @@ namespace Company_Management.Services
             return response;
         }
 
-        public List<FeedbackDetails> GetEmployeeByMonth(GetMonthwiseEmployees model)
+        public async Task<IEnumerable<Employee>> PicEmployeeForFeedback(PicRandomEmployees model)
         {
             string date = model.Date.ToString("dd/MM/yyyy");
 
-            List<FeedbackDetails> res = new QueryConstraints(_context).PicEmployees(date, model.NumberOfEmployees);
+            var employees = await new QueryConstraints(_context).PicEmployees(date, model.NumberOfEmployees);
 
-            if (res != null)
+            if (employees == null)
             {
-                _context.AddAsync(res);
-                _context.SaveChangesAsync();
-                //_context.SaveChanges();
+                throw new AppException("No employees left to pic");
+            }
+            return employees;
+        }
+
+        public async Task<IEnumerable<FeedbackDetails>> SaveEmployeeForFeedback(PicRandomEmployees model)
+        {
+            string date = model.Date.ToString("dd/MM/yyyy");
+            var feedbackDetails = new List<FeedbackDetails>();
+            var employeesForFeedback = await new QueryConstraints(_context).PicEmployees(date, model.NumberOfEmployees);
+
+            if (employeesForFeedback.Count == 0)
+            {
+                throw new AppException("No employees left for the feedback to pic");
             }
             else
             {
-                throw new AppException("No records found");
+                foreach (var employee in employeesForFeedback)
+                {
+                    feedbackDetails.Add(new FeedbackDetails
+                    {
+                        EmployeeID = employee.EmployeeID,
+                        Month = date,
+                        CreatedDate = DateTime.Today,
+                    });
+                }
+
+                _context.AddRangeAsync(feedbackDetails);
+                _context.SaveChangesAsync();
             }
-            return res;
+            return feedbackDetails;
         }
     }
 }

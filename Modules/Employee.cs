@@ -10,10 +10,11 @@ namespace Company_Management.Modules
         public string Name { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
         [DataType(DataType.EmailAddress)]
-        public string EmailID { get; set; }
+        public string? EmailID { get; set; }
+
         //public List<FeedbackDetails> FeedbackDetails { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Company_Management.Controllers.Params;
 using Company_Management.Modules;
-using System.Collections;
 
 namespace Company_Management.Services
 {
@@ -11,7 +10,7 @@ namespace Company_Management.Services
         public Task<IEnumerable<Employee>> GetAllEmployees();
         public Task<Employee> GetEmployeeByEmail(string emailID);
         public Task<Employee> GetEmployeeById(string empID);
-
-        public List<FeedbackDetails> GetEmployeeByMonth(GetMonthwiseEmployees model);
+        public Task<IEnumerable<Employee>> PicEmployeeForFeedback(PicRandomEmployees model);
+        public Task<IEnumerable<FeedbackDetails>> SaveEmployeeForFeedback(PicRandomEmployees model);
     }
 }

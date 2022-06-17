@@ -14,9 +14,9 @@ namespace Company_Management.Modules
 
         public string Month { get; set; }
 
-        public string FeedbackFromEmployee { get; set; }
+        public string? FeedbackFromEmployee { get; set; } = "";
 
-        public string FeedbackToEmployee { get; set; }
+        public string? FeedbackToEmployee { get; set; } = "";
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? CreatedDate { get; set; }

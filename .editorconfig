@@ -20,3 +20,9 @@ dotnet_diagnostic.CS0162.severity = silent
 
 # CS8619: Nullability of reference types in value doesn't match target type.
 dotnet_diagnostic.CS8619.severity = silent
+
+# CS8602: Dereference of a possibly null reference.
+dotnet_diagnostic.CS8602.severity = silent
+
+# CS4014: Because this call is not awaited, execution of the current method continues before the call is completed
+dotnet_diagnostic.CS4014.severity = silent

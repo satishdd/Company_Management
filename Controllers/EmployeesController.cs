@@ -4,6 +4,7 @@ using Company_Management.Modules;
 using Company_Management.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Text.Json;
 
 namespace Company_Management.Controllers
 {
@@ -83,14 +84,41 @@ namespace Company_Management.Controllers
 
         [HttpPost]
         [SwaggerOperation
-        (Summary = "Fetch random employees for feedback")]
+        (Summary = "Check available employees for feedback")]
         [Route("FetchRandomEmployees")]
-        public IActionResult GetEmployeeByMonth([FromForm] GetMonthwiseEmployees model)
+        public async Task<ActionResult> GetEmployeeByMonth([FromForm] PicRandomEmployees model)
         {
             if (model == null) { throw new AppException("Please enter the date"); }
             if (model.NumberOfEmployees == 0) { model.NumberOfEmployees = 5; }
-            var employees = _employeeService.GetEmployeeByMonth(model);
+            var employees = _employeeService.PicEmployeeForFeedback(model);
+            if (employees.Exception != null)
+            {
+                throw new AppException(employees.Exception.InnerException.Message);
+            }
             return Ok(employees);
+        }
+
+        [SwaggerOperation
+        (Summary = "Save random employees for feedback")]
+        [HttpPost("employee/{url}")]
+        public async Task<ActionResult> SaveEmployeeForFeedback(string url = "https://localhost:44300/api/Employees/FetchRandomEmployees")
+        {
+            //var currentData = await HttpClient.GetAsync(url);
+            var jsonSeriolizerOption = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            using (var httpClient = new HttpClient())
+            {
+                var employeesFeedback = new FeedbackDetails();
+                var content = new  StringContent()
+            }
+            if (ModelState.IsValid)
+            {
+                return Ok(pickedEmployees);
+            }
+            else
+            {
+                return null;
+            }
+            //return Ok(employees);
         }
     }
 }
