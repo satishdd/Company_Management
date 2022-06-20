@@ -24,7 +24,7 @@ namespace Company_Management.Context
             {
                 return (from emp in db.Employees
                         where !db.FeedbackDetails.Any(f => f.EmployeeID == emp.EmployeeID)
-                        select emp).Take(numberOfEmployees).ToList();
+                        select emp).OrderBy(o => Guid.NewGuid()).Take(numberOfEmployees).ToList();
             }
         }
     }

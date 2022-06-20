@@ -1,6 +1,7 @@
 ﻿using Company_Management.Context;
 using Company_Management.Controllers.Params;
 using Company_Management.Exceptions;
+using Company_Management.FileWriter;
 using Company_Management.Modules;
 using ExcelDataReader;
 using LumenWorks.Framework.IO.Csv;
@@ -326,7 +327,11 @@ namespace Company_Management.Services
             if (employees == null)
             {
                 throw new AppException("No employees left to pic");
-            }
+            }   
+
+            // Write result to json file for further use.
+            var fileName = "FileWriter/" + "Picked-Employees.json";
+            JsonFileUtils.SimpleWrite(employees, fileName);
             return employees;
         }
 
