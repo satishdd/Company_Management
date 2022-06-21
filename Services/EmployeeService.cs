@@ -329,9 +329,9 @@ namespace Company_Management.Services
                 throw new AppException("No employees left to pic");
             }   
 
-            // Write result to json file for further use.
-            var fileName = "FileWriter/" + "Picked-Employees.json";
-            JsonFileUtils.SimpleWrite(employees, fileName);
+            //// Write result to json file for further use.
+            //var fileName = "FileWriter/" + "Picked-Employees.json";
+            //JsonFileUtils.SimpleWrite(employees, fileName);
             return employees;
         }
 
@@ -361,6 +361,22 @@ namespace Company_Management.Services
                 _context.SaveChangesAsync();
             }
             return feedbackDetails;
+        }
+
+        private async Task CopyToJsonFormat(List<FeedbackDetails> feedbackDetails, DateTime date)
+        {
+            //var jsonFormat = new List<JsonFormat>();
+            //string[] arr;
+            //if (feedbackDetails != null)
+            //{
+            //    foreach (var employee in feedbackDetails)
+            //    {
+            //        jsonFormat.Add(new JsonFormat
+            //        {
+            //            arr.Append[] = employee.EmployeeID.ToString(),
+            //        });
+            //    }
+            //}
         }
     }
 }

@@ -3,6 +3,7 @@ using Company_Management.Exceptions;
 using Company_Management.Modules;
 using Company_Management.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Company_Management.Controllers
@@ -91,9 +92,53 @@ namespace Company_Management.Controllers
             if (model.NumberOfEmployees == 0) { model.NumberOfEmployees = 5; }
             var employees = _employeeService.PicEmployeeForFeedback(model);
 
-            if (employees.Exception == null) { return Ok(employees); }
+            var jsonResult = new JsonFormat();
+            if (employees != null)
+            {
+                foreach (var employee in await employees)
+                {
+                    jsonResult.Add(new JsonFormat
+                    {
+                        EmployeeID = employee.EmployeeID,
+                    });
+                }
+
+            }
+            if (employees.Exception == null)
+            {
+                return Ok(employees);
+            }
 
             throw new AppException(employees.Exception.InnerException.Message);
+        }
+
+        public System.Web.Http.IHttpActionResult Post(JObject objData)
+        {
+            List<Employee> lstItemDetails = new List<Employee>();
+            //1.
+            dynamic jsonData = objData;
+            //2.
+            JObject orderJson = jsonData.order;
+            //3.
+            JArray itemDetailsJson = jsonData.itemDetails;
+            //4.
+            var picked = orderJson.ToObject<JsonFormat>();
+            //5.
+            foreach (var item in itemDetailsJson)
+            {
+                lstItemDetails.Add(item.ToObject<Employee>());
+            }
+            //6.
+            //ctx.picked.Add(Order);
+            ////7.
+            //foreach (Employee itemDetail in lstItemDetails)
+            //{
+            //    ctx.ItemDetails.Add(itemDetail);
+            //}
+
+            //ctx.SaveChanges();
+
+            return Ok();
         }
     }
 }
