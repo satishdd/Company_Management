@@ -3,6 +3,7 @@ using Company_Management.Exceptions;
 using Company_Management.Modules;
 using Company_Management.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -92,18 +93,6 @@ namespace Company_Management.Controllers
             if (model.NumberOfEmployees == 0) { model.NumberOfEmployees = 5; }
             var employees = _employeeService.PicEmployeeForFeedback(model);
 
-            var jsonResult = new JsonFormat();
-            if (employees != null)
-            {
-                foreach (var employee in await employees)
-                {
-                    jsonResult.Add(new JsonFormat
-                    {
-                        EmployeeID = employee.EmployeeID,
-                    });
-                }
-
-            }
             if (employees.Exception == null)
             {
                 return Ok(employees);
@@ -112,33 +101,29 @@ namespace Company_Management.Controllers
             throw new AppException(employees.Exception.InnerException.Message);
         }
 
-        public System.Web.Http.IHttpActionResult Post(JObject objData)
+        [HttpPost]
+        [SwaggerOperation
+        (Summary = "Save picked employees")]
+        [Route("SaveRandomEmployees")]
+        public async Task<ActionResult> SaveRandomlyFetchedEmployees() //[FromForm] JsonFormat jsonFormatter)
         {
-            List<Employee> lstItemDetails = new List<Employee>();
-            //1.
-            dynamic jsonData = objData;
-            //2.
-            JObject orderJson = jsonData.order;
-            //3.
-            JArray itemDetailsJson = jsonData.itemDetails;
-            //4.
-            var picked = orderJson.ToObject<JsonFormat>();
-            //5.
-            foreach (var item in itemDetailsJson)
-            {
-                lstItemDetails.Add(item.ToObject<Employee>());
-            }
-            //6.
-            //ctx.picked.Add(Order);
-            ////7.
-            //foreach (Employee itemDetail in lstItemDetails)
+            string path = Path.Combine(Environment.CurrentDirectory, @"..\UploadFileFolder/Picked-Employees.json");
+            //string path = "UploadFileFolder/Picked-Employees.json";
+            StreamReader r = new StreamReader(path);
+            string jsonString = r.ReadToEnd();
+            JsonFormat m = JsonConvert.DeserializeObject<JsonFormat>(jsonString);
+            JArray jsonVal = JArray.Parse(@"D:\Company_Management\FileWriter\Picked-Employees.json") as JArray;
+
+            //if (model == null) { throw new AppException("Please enter the date"); }
+            //if (model.NumberOfEmployees == 0) { model.NumberOfEmployees = 5; }
+            //var employees = _employeeService.PicEmployeeForFeedback(model);
+
+            //if (employees.Exception == null)
             //{
-            //    ctx.ItemDetails.Add(itemDetail);
+            //    return Ok(employees);
             //}
-
-            //ctx.SaveChanges();
-
-            return Ok();
+            throw new AppException(jsonVal.ToString());
+            //throw new AppException(employees.Exception.InnerException.Message);
         }
     }
 }

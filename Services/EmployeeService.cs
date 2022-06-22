@@ -318,6 +318,7 @@ namespace Company_Management.Services
             return response;
         }
 
+        private JsonFormat jsonResult;
         public async Task<IEnumerable<Employee>> PicEmployeeForFeedback(PicRandomEmployees model)
         {
             string date = model.Date.ToString("dd/MM/yyyy");
@@ -327,11 +328,27 @@ namespace Company_Management.Services
             if (employees == null)
             {
                 throw new AppException("No employees left to pic");
-            }   
+            }
 
-            //// Write result to json file for further use.
-            //var fileName = "FileWriter/" + "Picked-Employees.json";
-            //JsonFileUtils.SimpleWrite(employees, fileName);
+            //// Create json format to send input as a json for inserting picked data to db.
+            if (employees.Count > 0)
+                {
+                    List<string> list = new List<string>();
+
+                    foreach (var employee in employees)
+                    {
+                        list.Add(employee.EmployeeID);
+                    }
+                    jsonResult = new JsonFormat();
+
+                    jsonResult.Month = model.Date;
+                    jsonResult.CreatedDate = DateTime.Now;
+                    jsonResult.EmployeeID = list.ToArray();
+                }
+
+            // Write result to json file for further use.
+            var fileName = "FileWriter/" + "Picked-Employees.json";
+            JsonFileUtils.SimpleWrite(jsonResult, fileName);
             return employees;
         }
 
@@ -363,20 +380,20 @@ namespace Company_Management.Services
             return feedbackDetails;
         }
 
-        private async Task CopyToJsonFormat(List<FeedbackDetails> feedbackDetails, DateTime date)
-        {
-            //var jsonFormat = new List<JsonFormat>();
-            //string[] arr;
-            //if (feedbackDetails != null)
-            //{
-            //    foreach (var employee in feedbackDetails)
-            //    {
-            //        jsonFormat.Add(new JsonFormat
-            //        {
-            //            arr.Append[] = employee.EmployeeID.ToString(),
-            //        });
-            //    }
-            //}
-        }
+        //private async Task CopyToJsonFormat(List<FeedbackDetails> feedbackDetails, DateTime date)
+        //{
+        //    //var jsonFormat = new List<JsonFormat>();
+        //    //string[] arr;
+        //    //if (feedbackDetails != null)
+        //    //{
+        //    //    foreach (var employee in feedbackDetails)
+        //    //    {
+        //    //        jsonFormat.Add(new JsonFormat
+        //    //        {
+        //    //            arr.Append[] = employee.EmployeeID.ToString(),
+        //    //        });
+        //    //    }
+        //    //}
+        //}
     }
 }
