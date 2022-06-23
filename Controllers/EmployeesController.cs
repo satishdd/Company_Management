@@ -1,4 +1,5 @@
-﻿using Company_Management.Controllers.Params;
+﻿using Azure.Core;
+using Company_Management.Controllers.Params;
 using Company_Management.Exceptions;
 using Company_Management.Modules;
 using Company_Management.Services;
@@ -124,6 +125,15 @@ namespace Company_Management.Controllers
             //}
             throw new AppException(jsonVal.ToString());
             //throw new AppException(employees.Exception.InnerException.Message);
+        }
+
+        [SwaggerOperation
+        (Summary = "Save available employees for feedback")]
+        [HttpPost("employee/save")]
+        public async Task<IActionResult> PicEmployeeByMonth([FromBody] Request body)
+        {
+            var res = body;
+            throw new AppException();
         }
     }
 }

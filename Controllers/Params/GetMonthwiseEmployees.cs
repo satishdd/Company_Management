@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Company_Management.Controllers.Params
 {
@@ -8,6 +10,7 @@ namespace Company_Management.Controllers.Params
         [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }
 
+        [DefaultValue(5)]
         public int NumberOfEmployees { get; set; }
     }
 }

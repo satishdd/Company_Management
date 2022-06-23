@@ -5,6 +5,7 @@ using Company_Management.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.ComponentModel;
 
 namespace Company_Management
 {
@@ -22,6 +23,8 @@ namespace Company_Management
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+            //services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new GuidConverter()));
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             // services.AddControllers().AddXmlSerializerFormatters();
 
